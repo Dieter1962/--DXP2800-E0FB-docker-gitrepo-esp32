@@ -1,9 +1,6 @@
-// proxy.conf.json
-// Für lokale Entwicklung: ng serve leitet API-Calls an ESP32 weiter
-// Verwendung: ng serve --proxy-config proxy.conf.json
 {
   "/events": {
-    "target": "http://myhome.local",
+    "target": "http://192.168.178.33",
     "secure": false,
     "changeOrigin": true,
     "headers": {
@@ -11,7 +8,12 @@
     }
   },
   "/led": {
-    "target": "http://myhome.local",
+    "target": "http://192.168.178.33",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/backlight": {
+    "target": "http://192.168.178.33",
     "secure": false,
     "changeOrigin": true
   }

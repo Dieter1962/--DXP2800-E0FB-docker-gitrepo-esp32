@@ -2,6 +2,8 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.5.
 
+
+"C:\Users\Dieter\AppData\Local\Arduino15\packages\esp32\hardware\esp32\3.3.7\tools\espota.exe" -r -i 192.168.178.33 "--auth=5179192693644646" -f "C:\Users\Dieter\AppData\Local\arduino\sketches\86D7340E4324E3FD94BE3BAE8513FBCA/sepwevsrv.ino.bin"
 ## Development server
 
 To start a local development server, run:

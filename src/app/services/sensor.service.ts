@@ -73,6 +73,31 @@ export class SensorService {
       setTimeout(() => this.connect(), 3000);
     };
   }
+ 
+  // ── Rohdaten für MqttService ───────────────────────────
+  getRaw(): SensorRaw {
+    return this.raw();
+  }
+  // ── REST: Backlight steuern ──────────────────────────────
+async setBacklight(state: 'on' | 'off'): Promise<void> {
+  // Wir nutzen denselben Ansatz wie bei setLed
+  const body = new URLSearchParams({ state });
+  
+  try {
+    console.log(body.toString());
+    
+    await fetch('/backlight', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+    });
+    console.log(`Backlight erfolgreich auf ${state} gesetzt`);
+  } catch (error) {
+    console.error('Fehler beim Setzen des Backlights:', error);
+  }
+}
+
+
 
   // ── REST: LED steuern ───────────────────────────────────
   async setLed(state: 'on' | 'off'): Promise<void> {

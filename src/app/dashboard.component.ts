@@ -1,5 +1,5 @@
 import { SensorService } from './services/sensor.service';
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -55,7 +55,52 @@ import { CommonModule } from '@angular/common';
               <button class="btn off" (click)="sensor.setLed('off')">OFF</button>
             </div>
           </div>
+          <!-- <h2>LCD Text Sender</h2>
+          <form action="/update" method="GET">
+            <input type="text" name="line1" placeholder="Zeile 1 (max 16)" maxlength="16"><br><br>
+            <input type="text" name="line2" placeholder="Zeile 2 (max 16)" maxlength="16"><br><br>
+            <input type="submit" value="Anzeigen">
+          </form> -->
+          <div class="control-row" style="margin-top: 10px;">
+              <span class="k">LCD Backlight</span>
+              <label class="switch">
+                <input type="checkbox" 
+                       [checked]="backlightStatus()" 
+                       (change)="toggleBacklight()">
+                <span class="slider"></span>
+              </label>
+            </div>
+          <hr style="margin: 20px 0; border: 0; border-top: 1px solid #444;">
 
+          <h2>LCD Text Sender</h2>
+          
+          <div style="margin-bottom: 15px;">
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" 
+                     [checked]="lcdEnabled()" 
+                     (change)="lcdEnabled.set(!lcdEnabled())"> 
+              <span>Sende-Funktion aktivieren</span>
+            </label>
+          </div>
+
+          <form [action]="lcdEnabled() ? '/update' : 'javascript:void(0)'" method="GET">
+            <input type="text" 
+                   name="line1" 
+                   placeholder="Zeile 1 (max 16)" 
+                   maxlength="16" 
+                   [disabled]="!lcdEnabled()"><br><br>
+            
+            <input type="text" 
+                   name="line2" 
+                   placeholder="Zeile 2 (max 16)" 
+                   maxlength="16" 
+                   [disabled]="!lcdEnabled()"><br><br>
+            
+            <input type="submit" 
+                   value="Anzeigen" 
+                   [disabled]="!lcdEnabled()"
+                   [style.opacity]="lcdEnabled() ? 1 : 0.5">
+          </form>
           <!-- Verbindungsstatus -->
           <div class="status" [class.connected]="sensor.connected()">
             <span class="dot"></span>
@@ -73,7 +118,18 @@ export class DashboardComponent {
   sensor = inject(SensorService);
 
   hostname = location.hostname;
+// Signal für die Checkbox-Steuerung
+  lcdEnabled = signal<boolean>(false);
 
+  backlightStatus = signal<boolean>(false);
+
+  toggleBacklight() {
+    const newState = !this.backlightStatus();
+    this.backlightStatus.set(newState);
+    
+    // Aufruf an den Service (muss in sensor.service.ts implementiert sein)
+     this.sensor.setBacklight(newState ? 'on' : 'off');
+  }
   // computed signals – werden automatisch neu berechnet
   // tempDisplay = computed(() => {
   //   const t = this.sensor.temp();
